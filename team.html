@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Team Stats — HARDWOOD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #FF6B35;
+    --court: #C8A96E;
+    --ink: #0D0D0D;
+    --off-white: #F5F2ED;
+    --muted: #777;
+    --card-bg: #161616;
+    --border: #252525;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--ink); color:var(--off-white); font-family:'DM Sans',sans-serif; min-height:100vh; }
+
+  header {
+    position:sticky; top:0; z-index:100;
+    background:rgba(13,13,13,0.94); backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 2.5rem; height:58px;
+  }
+  .logo { font-family:'Bebas Neue',sans-serif; font-size:1.9rem; letter-spacing:0.12em; color:var(--off-white); text-decoration:none; }
+  .logo span { color:var(--orange); }
+  .back-btn {
+    display:flex; align-items:center; gap:0.5rem;
+    color:var(--muted); font-size:0.8rem; font-weight:600;
+    letter-spacing:0.06em; text-transform:uppercase;
+    text-decoration:none; transition:color 0.15s;
+    background:none; border:none; cursor:pointer;
+  }
+  .back-btn:hover { color:var(--off-white); }
+
+  .container { max-width:900px; margin:0 auto; padding:2.5rem 1.5rem 4rem; }
+
+  /* TEAM HERO */
+  .team-hero {
+    padding:2rem; margin-bottom:2rem;
+    background:var(--card-bg); border:1px solid var(--border);
+    border-radius:16px; position:relative; overflow:hidden;
+  }
+  .team-hero-accent {
+    position:absolute; left:0; top:0; bottom:0; width:5px;
+    background:var(--team-color, var(--orange));
+  }
+  .team-hero-glow {
+    position:absolute; inset:0; opacity:0.05;
+    background:var(--team-color, var(--orange));
+  }
+  .team-name {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:3rem; letter-spacing:0.04em; line-height:1;
+    color:var(--off-white); margin-bottom:0.5rem; position:relative;
+  }
+  .team-conf {
+    font-size:0.72rem; font-weight:700; letter-spacing:0.1em;
+    text-transform:uppercase; color:var(--muted); position:relative;
+  }
+  .team-conf span { color:var(--team-color, var(--orange)); }
+
+  /* RECORD CARDS */
+  .section-label {
+    font-family:'Bebas Neue',sans-serif; font-size:0.8rem; letter-spacing:0.22em;
+    color:var(--orange); text-transform:uppercase;
+    display:flex; align-items:center; gap:0.8rem; margin-bottom:1rem;
+  }
+  .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+  .stat-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:10px; margin-bottom:2rem; }
+  .stat-card {
+    background:var(--card-bg); border:1px solid var(--border);
+    border-radius:10px; padding:0.9rem 0.75rem; text-align:center;
+  }
+  .stat-val { font-family:'Bebas Neue',sans-serif; font-size:1.9rem; letter-spacing:0.02em; color:var(--off-white); line-height:1; margin-bottom:0.3rem; }
+  .stat-val.orange { color:var(--orange); }
+  .stat-label { font-size:0.65rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); }
+
+  /* ROSTER TABLE */
+  .roster-table-wrap { background:var(--card-bg); border:1px solid var(--border); border-radius:14px; overflow:hidden; }
+  .roster-table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+  .roster-table th { padding:0.5rem 0.75rem; font-size:0.65rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); border-bottom:1px solid var(--border); text-align:center; background:#141414; }
+  .roster-table th:first-child { text-align:left; }
+  .roster-table td { padding:0.65rem 0.75rem; border-bottom:1px solid #181818; text-align:center; color:#C0B8B0; }
+  .roster-table td:first-child { text-align:left; font-weight:600; color:var(--off-white); }
+  .roster-table tr:last-child td { border-bottom:none; }
+  .roster-table tr:hover td { background:#1A1A1A; }
+  .roster-table td.pts { color:var(--orange); font-family:'Bebas Neue',sans-serif; font-size:1rem; }
+  .player-link { color:var(--off-white); text-decoration:none; border-bottom:1px solid #333; transition:border-color 0.15s; }
+  .player-link:hover { border-bottom-color:var(--court); color:var(--court); }
+
+  .state-msg { text-align:center; padding:4rem 2rem; color:var(--muted); font-size:0.9rem; }
+  .spinner { width:32px; height:32px; border:3px solid var(--border); border-top-color:var(--orange); border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 1rem; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">HARD<span>WOOD</span></a>
+  <button class="back-btn" onclick="history.back()">← Back to Article</button>
+</header>
+
+<div class="container">
+  <div id="content">
+    <div class="state-msg"><div class="spinner"></div>Loading team stats...</div>
+  </div>
+</div>
+
+<script>
+const TEAMS = {
+  spurs:       { name:"San Antonio Spurs",       abbr:"SAS", color:"#8A8A8A", conf:"Western Conference", bdlId:28,
+    players:[
+      { name:"Victor Wembanyama", pid:"wembanyama" },
+      { name:"De'Aaron Fox",      pid:"fox" },
+      { name:"Dylan Harper",      pid:"harper" },
+    ],
+    record:"62-20", ppg:"118.4", oppg:"108.1", pace:"99.2", netRtg:"+8.6"
+  },
+  timberwolves:{ name:"Minnesota Timberwolves",  abbr:"MIN", color:"#005083", conf:"Western Conference", bdlId:20,
+    players:[
+      { name:"Anthony Edwards",  pid:"edwards" },
+      { name:"Julius Randle",    pid:"randle" },
+      { name:"Ayo Dosunmu",      pid:"dosunmu" },
+    ],
+    record:"49-33", ppg:"113.2", oppg:"110.8", pace:"97.4", netRtg:"+1.9"
+  },
+  pistons:     { name:"Detroit Pistons",         abbr:"DET", color:"#1F3A6E", conf:"Eastern Conference", bdlId:8,
+    players:[
+      { name:"Cade Cunningham",  pid:"cunningham" },
+      { name:"Jalen Duren",      pid:"duren" },
+      { name:"Ausar Thompson",   pid:"athompson" },
+      { name:"Daniss Jenkins",   pid:"jenkins" },
+      { name:"Caris LeVert",     pid:"levert" },
+      { name:"Paul Reed",        pid:"reed" },
+    ],
+    record:"60-22", ppg:"116.7", oppg:"109.3", pace:"98.8", netRtg:"+6.2"
+  },
+  cavaliers:   { name:"Cleveland Cavaliers",     abbr:"CLE", color:"#6F263D", conf:"Eastern Conference", bdlId:5,
+    players:[
+      { name:"Donovan Mitchell", pid:null },
+      { name:"Darius Garland",   pid:null },
+      { name:"Evan Mobley",      pid:null },
+    ],
+    record:"52-30", ppg:"112.4", oppg:"107.6", pace:"96.8", netRtg:"+4.1"
+  },
+  thunder:     { name:"Oklahoma City Thunder",   abbr:"OKC", color:"#007AC1", conf:"Western Conference", bdlId:21,
+    players:[
+      { name:"Shai Gilgeous-Alexander", pid:null },
+      { name:"Chet Holmgren",           pid:null },
+      { name:"Jalen Williams",          pid:null },
+    ],
+    record:"64-18", ppg:"119.8", oppg:"106.4", pace:"100.1", netRtg:"+10.8"
+  },
+};
+
+function fmt(val, pct=false) {
+  if (val === null || val === undefined) return "—";
+  if (pct) return (val*100).toFixed(1)+"%";
+  if (typeof val === "number") return val%1===0 ? val : val.toFixed(1);
+  return val;
+}
+
+async function fetchRosterStats(players) {
+  const results = [];
+  for (const p of players) {
+    try {
+      const res = await fetch(`https://api.balldontlie.io/v1/players?search=${encodeURIComponent(p.name.split(" ").slice(-1)[0])}&per_page=20`);
+      const data = await res.json();
+      const match = data.data?.find(pl =>
+        `${pl.first_name} ${pl.last_name}`.toLowerCase().includes(p.name.toLowerCase().split(" ").slice(-1)[0].toLowerCase())
+      );
+      if (!match) { results.push({ name:p.name, pid:p.pid, stats:null }); continue; }
+
+      const sRes = await fetch(`https://api.balldontlie.io/v1/season_averages?season=2025&player_ids[]=${match.id}`);
+      const sData = await sRes.json();
+      results.push({ name:p.name, pid:p.pid, stats:sData.data?.[0] || null });
+    } catch {
+      results.push({ name:p.name, pid:p.pid, stats:null });
+    }
+  }
+  return results;
+}
+
+async function loadTeam() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+  const team = TEAMS[id];
+
+  if (!team) {
+    document.getElementById("content").innerHTML = `<div class="state-msg">Team not found.</div>`;
+    return;
+  }
+
+  document.title = `${team.name} — HARDWOOD`;
+
+  // Show hero immediately with hardcoded team stats
+  const wins = team.record.split("-")[0];
+  const losses = team.record.split("-")[1];
+
+  document.getElementById("content").innerHTML = `
+    <div class="team-hero" style="--team-color:${team.color}">
+      <div class="team-hero-accent"></div>
+      <div class="team-hero-glow"></div>
+      <div class="team-name">${team.name}</div>
+      <div class="team-conf">${team.conf} &nbsp;·&nbsp; <span>${team.abbr}</span></div>
+    </div>
+
+    <div class="section-label">2025–26 Team Stats</div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-val orange">${wins}</div><div class="stat-label">Wins</div></div>
+      <div class="stat-card"><div class="stat-val">${losses}</div><div class="stat-label">Losses</div></div>
+      <div class="stat-card"><div class="stat-val orange">${team.ppg}</div><div class="stat-label">PPG</div></div>
+      <div class="stat-card"><div class="stat-val">${team.oppg}</div><div class="stat-label">Opp PPG</div></div>
+      <div class="stat-card"><div class="stat-val">${team.pace}</div><div class="stat-label">Pace</div></div>
+      <div class="stat-card"><div class="stat-val orange">${team.netRtg}</div><div class="stat-label">Net Rtg</div></div>
+    </div>
+
+    <div class="section-label">Key Players — 2025–26 Averages</div>
+    <div class="roster-table-wrap">
+      <table class="roster-table">
+        <thead>
+          <tr><th>Player</th><th>GP</th><th>PTS</th><th>REB</th><th>AST</th><th>STL</th><th>BLK</th><th>FG%</th><th>3P%</th><th>+/-</th></tr>
+        </thead>
+        <tbody id="roster-body">
+          <tr><td colspan="10" style="text-align:center;color:var(--muted);padding:1.5rem;">Loading player stats...</td></tr>
+        </tbody>
+      </table>
+    </div>`;
+
+  // Now fetch live player stats
+  const rosterStats = await fetchRosterStats(team.players);
+
+  const rows = rosterStats.map(p => {
+    const s = p.stats;
+    const link = p.pid ? `<a href="player.html?id=${p.pid}" class="player-link">${p.name}</a>` : p.name;
+    if (!s) return `<tr><td>${link}</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>`;
+    return `<tr>
+      <td>${link}</td>
+      <td>${s.games_played||"—"}</td>
+      <td class="pts">${fmt(s.pts)}</td>
+      <td>${fmt(s.reb)}</td>
+      <td>${fmt(s.ast)}</td>
+      <td>${fmt(s.stl)}</td>
+      <td>${fmt(s.blk)}</td>
+      <td>${fmt(s.fg_pct, true)}</td>
+      <td>${fmt(s.fg3_pct, true)}</td>
+      <td>${s.plus_minus_100_poss !== undefined ? fmt(s.plus_minus_100_poss) : "—"}</td>
+    </tr>`;
+  }).join("");
+
+  document.getElementById("roster-body").innerHTML = rows || `<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:1.5rem;">No data available.</td></tr>`;
+}
+
+loadTeam();
+</script>
+</body>
+</html>
