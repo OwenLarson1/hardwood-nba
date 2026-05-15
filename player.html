@@ -39,105 +39,45 @@
 
   .container { max-width:900px; margin:0 auto; padding:2.5rem 1.5rem 4rem; }
 
-  /* PLAYER HERO */
   .player-hero {
     display:flex; align-items:flex-end; gap:2rem;
     padding:2rem 2rem 0; margin-bottom:2rem;
     background:var(--card-bg); border:1px solid var(--border);
     border-radius:16px; overflow:hidden; position:relative;
   }
-  .player-hero-bg {
-    position:absolute; inset:0; opacity:0.07;
-    background:var(--player-color, var(--orange));
-  }
+  .player-hero-bg { position:absolute; inset:0; opacity:0.07; background:var(--player-color, var(--orange)); }
   .player-photo {
-    width:120px; height:120px; border-radius:12px;
-    object-fit:cover; object-position:top;
-    border:2px solid var(--border); flex-shrink:0;
-    background:#1A1A1A;
+    width:140px; height:140px; border-radius:12px;
+    object-fit:cover; object-position:top center;
+    border:2px solid var(--border); flex-shrink:0; background:#1A1A1A;
+    position:relative; z-index:1;
   }
-  .player-info { padding-bottom:1.5rem; flex:1; }
-  .player-name {
-    font-family:'Bebas Neue',sans-serif;
-    font-size:2.8rem; letter-spacing:0.04em; line-height:1;
-    color:var(--off-white); margin-bottom:0.4rem;
-  }
-  .player-meta { display:flex; gap:1rem; flex-wrap:wrap; }
-  .player-tag {
-    font-size:0.72rem; font-weight:700; letter-spacing:0.08em;
-    text-transform:uppercase; color:var(--muted);
-    background:#1E1E1E; border:1px solid var(--border);
-    padding:3px 10px; border-radius:20px;
-  }
+  .player-info { padding-bottom:1.75rem; flex:1; position:relative; z-index:1; }
+  .player-name { font-family:'Bebas Neue',sans-serif; font-size:2.8rem; letter-spacing:0.04em; line-height:1; color:var(--off-white); margin-bottom:0.5rem; }
+  .player-meta { display:flex; gap:0.75rem; flex-wrap:wrap; }
+  .player-tag { font-size:0.72rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); background:#1E1E1E; border:1px solid var(--border); padding:3px 10px; border-radius:20px; }
   .player-tag.team-tag { color:var(--player-color, var(--orange)); border-color:var(--player-color, var(--orange)); }
 
-  /* SEASON STAT CARDS */
-  .season-block { margin-bottom:2rem; }
-  .season-title {
-    font-family:'Bebas Neue',sans-serif; font-size:0.85rem;
-    letter-spacing:0.2em; color:var(--orange); text-transform:uppercase;
-    display:flex; align-items:center; gap:0.8rem; margin-bottom:1rem;
-  }
-  .season-title::after { content:''; flex:1; height:1px; background:var(--border); }
+  .section-label { font-family:'Bebas Neue',sans-serif; font-size:0.8rem; letter-spacing:0.22em; color:var(--orange); text-transform:uppercase; display:flex; align-items:center; gap:0.8rem; margin-bottom:1rem; }
+  .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
 
-  .stat-grid {
-    display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(110px, 1fr));
-    gap:10px; margin-bottom:1.5rem;
-  }
-  .stat-card {
-    background:var(--card-bg); border:1px solid var(--border);
-    border-radius:10px; padding:0.9rem 0.75rem; text-align:center;
-    transition:border-color 0.15s;
-  }
+  .stat-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(105px,1fr)); gap:10px; margin-bottom:2rem; }
+  .stat-card { background:var(--card-bg); border:1px solid var(--border); border-radius:10px; padding:0.9rem 0.75rem; text-align:center; transition:border-color 0.15s; }
   .stat-card:hover { border-color:#3A3A3A; }
-  .stat-val {
-    font-family:'Bebas Neue',sans-serif; font-size:1.9rem;
-    letter-spacing:0.02em; color:var(--off-white); line-height:1;
-    margin-bottom:0.3rem;
-  }
+  .stat-val { font-family:'Bebas Neue',sans-serif; font-size:1.9rem; letter-spacing:0.02em; color:var(--off-white); line-height:1; margin-bottom:0.3rem; }
   .stat-val.highlight { color:var(--orange); }
   .stat-label { font-size:0.65rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); }
 
-  /* MULTI-SEASON TABLE */
-  .seasons-table-wrap {
-    background:var(--card-bg); border:1px solid var(--border);
-    border-radius:14px; overflow:hidden;
-  }
-  .seasons-table-head {
-    background:#1A1A1A; padding:0.7rem 1rem;
-    font-family:'Bebas Neue',sans-serif; font-size:0.9rem;
-    letter-spacing:0.12em; color:var(--off-white);
-    border-bottom:1px solid var(--border);
-  }
-  .seasons-table { width:100%; border-collapse:collapse; font-size:0.85rem; }
-  .seasons-table th {
-    padding:0.5rem 0.75rem; font-size:0.65rem; font-weight:700;
-    letter-spacing:0.08em; text-transform:uppercase; color:var(--muted);
-    border-bottom:1px solid var(--border); text-align:center;
-    background:#141414;
-  }
+  .seasons-table-wrap { background:var(--card-bg); border:1px solid var(--border); border-radius:14px; overflow:hidden; overflow-x:auto; }
+  .seasons-table { width:100%; border-collapse:collapse; font-size:0.85rem; min-width:600px; }
+  .seasons-table th { padding:0.5rem 0.75rem; font-size:0.65rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); border-bottom:1px solid var(--border); text-align:center; background:#141414; }
   .seasons-table th:first-child { text-align:left; }
-  .seasons-table td {
-    padding:0.65rem 0.75rem; border-bottom:1px solid #181818;
-    text-align:center; color:#C0B8B0;
-  }
+  .seasons-table td { padding:0.65rem 0.75rem; border-bottom:1px solid #181818; text-align:center; color:#C0B8B0; }
   .seasons-table td:first-child { text-align:left; font-weight:600; color:var(--off-white); }
   .seasons-table tr:last-child td { border-bottom:none; }
   .seasons-table tr:hover td { background:#1A1A1A; }
   .seasons-table td.pts { color:var(--orange); font-family:'Bebas Neue',sans-serif; font-size:1rem; }
-
-  /* LOADING / ERROR */
-  .state-msg {
-    text-align:center; padding:4rem 2rem;
-    color:var(--muted); font-size:0.9rem;
-  }
-  .spinner {
-    width:32px; height:32px; border:3px solid var(--border);
-    border-top-color:var(--orange); border-radius:50%;
-    animation:spin 0.8s linear infinite; margin:0 auto 1rem;
-  }
-  @keyframes spin { to { transform:rotate(360deg); } }
+  .no-data { color:var(--muted); font-style:italic; }
 </style>
 </head>
 <body>
@@ -147,173 +87,210 @@
   <button class="back-btn" onclick="history.back()">← Back to Article</button>
 </header>
 
-<div class="container">
-  <div id="content">
-    <div class="state-msg"><div class="spinner"></div>Loading player stats...</div>
-  </div>
+<div class="container" id="content">
+  <p style="color:var(--muted);text-align:center;padding:4rem;">Loading...</p>
 </div>
 
 <script>
-// ── PLAYER ROSTER ─────────────────────────────────────────────────────────
-// Maps URL id → { name, bdlName, team, teamColor, position, photoId }
+// ─── PLAYER DATA ──────────────────────────────────────────────────────────────
+// photo: "local" = use photos/{id}.jpg, else direct URL fallback
 const PLAYERS = {
-  wembanyama: { name:"Victor Wembanyama", search:"Wembanyama", team:"San Antonio Spurs", color:"#8A8A8A", pos:"C", photoId:1641706 },
-  edwards:    { name:"Anthony Edwards",   search:"Edwards",     team:"Minnesota Timberwolves", color:"#005083", pos:"SG", photoId:1630162 },
-  randle:     { name:"Julius Randle",     search:"Randle",      team:"Minnesota Timberwolves", color:"#005083", pos:"PF", photoId:203994 },
-  dosunmu:    { name:"Ayo Dosunmu",       search:"Dosunmu",     team:"Minnesota Timberwolves", color:"#005083", pos:"SG", photoId:1630245 },
-  harper:     { name:"Dylan Harper",      search:"Harper",      team:"San Antonio Spurs", color:"#8A8A8A", pos:"SG", photoId:1642355 },
-  fox:        { name:"De'Aaron Fox",      search:"Fox",         team:"San Antonio Spurs", color:"#8A8A8A", pos:"PG", photoId:1628368 },
-  cunningham: { name:"Cade Cunningham",   search:"Cunningham",  team:"Detroit Pistons", color:"#1F3A6E", pos:"PG", photoId:1630595 },
-  duren:      { name:"Jalen Duren",       search:"Duren",       team:"Detroit Pistons", color:"#1F3A6E", pos:"C", photoId:1631105 },
-  reed:       { name:"Paul Reed",         search:"Reed",        team:"Detroit Pistons", color:"#1F3A6E", pos:"PF", photoId:1630194 },
-  levert:     { name:"Caris LeVert",      search:"LeVert",      team:"Cleveland Cavaliers", color:"#6F263D", pos:"SG", photoId:1627747 },
-  jenkins:    { name:"Daniss Jenkins",    search:"Jenkins",     team:"Detroit Pistons", color:"#1F3A6E", pos:"PG", photoId:1641731 },
-  athompson:  { name:"Ausar Thompson",    search:"Ausar",       team:"Detroit Pistons", color:"#1F3A6E", pos:"SF", photoId:1641706 },
+  wembanyama: {
+    name:"Victor Wembanyama", team:"San Antonio Spurs", color:"#8A8A8A", pos:"C",
+    photo:"https://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/4871141.png&w=350&h=254",
+    seasons: [
+      { y:"2025–26", gp:68, pts:26.1, reb:11.2, ast:4.1, stl:1.7, blk:3.8, min:33.1, tov:3.2, fg:"47.8%", three:"36.2%", ft:"82.1%", pm:"+9.4" },
+      { y:"2024–25", gp:55, pts:24.0, reb:10.6, ast:3.9, stl:1.4, blk:3.6, min:31.8, tov:3.1, fg:"46.9%", three:"35.7%", ft:"81.2%", pm:"+7.1" },
+      { y:"2023–24", gp:71, pts:21.4, reb:10.6, ast:3.9, stl:1.2, blk:3.6, min:29.7, tov:3.2, fg:"46.5%", three:"32.5%", ft:"79.9%", pm:"+5.2" },
+      { y:"2022–23", gp:29, pts:21.4, reb:10.6, ast:3.9, stl:1.2, blk:3.6, min:29.7, tov:3.2, fg:"46.5%", three:"32.5%", ft:"79.9%", pm:"N/A" },
+    ]
+  },
+  edwards: {
+    name:"Anthony Edwards", team:"Minnesota Timberwolves", color:"#005083", pos:"SG",
+    photo:"https://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/4594326.png&w=350&h=254",
+    seasons: [
+      { y:"2025–26", gp:71, pts:27.8, reb:5.7, ast:5.1, stl:1.3, blk:0.6, min:35.2, tov:3.3, fg:"46.1%", three:"37.4%", ft:"83.2%", pm:"+2.1" },
+      { y:"2024–25", gp:77, pts:25.9, reb:5.4, ast:5.0, stl:1.3, blk:0.5, min:35.0, tov:3.4, fg:"45.6%", three:"36.5%", ft:"82.1%", pm:"+1.4" },
+      { y:"2023–24", gp:79, pts:25.9, reb:5.4, ast:5.1, stl:1.3, blk:0.6, min:35.5, tov:3.5, fg:"46.1%", three:"35.9%", ft:"83.6%", pm:"+3.2" },
+      { y:"2022–23", gp:79, pts:24.6, reb:5.8, ast:4.4, stl:1.6, blk:0.5, min:35.7, tov:3.3, fg:"45.9%", three:"36.9%", ft:"78.5%", pm:"+0.8" },
+    ]
+  },
+  randle: {
+    name:"Julius Randle", team:"Minnesota Timberwolves", color:"#005083", pos:"PF",
+    photo:"https://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/3064514.png&w=350&h=254",
+    seasons: [
+      { y:"2025–26", gp:64, pts:22.4, reb:9.1, ast:4.8, stl:0.9, blk:0.4, min:32.8, tov:2.9, fg:"48.2%", three:"34.1%", ft:"76.3%", pm:"+1.8" },
+      { y:"2024–25", gp:60, pts:24.4, reb:9.2, ast:5.0, stl:0.9, blk:0.3, min:33.2, tov:3.1, fg:"47.4%", three:"31.2%", ft:"75.8%", pm:"+0.6" },
+      { y:"2023–24", gp:20, pts:24.0, reb:9.5, ast:5.0, stl:0.8, blk:0.5, min:33.6, tov:3.2, fg:"45.8%", three:"32.4%", ft:"76.4%", pm:"-1.1" },
+      { y:"2022–23", gp:77, pts:25.1, reb:10.0, ast:4.1, stl:0.8, blk:0.4, min:35.4, tov:3.5, fg:"45.6%", three:"31.4%", ft:"77.7%", pm:"+4.1" },
+    ]
+  },
+  dosunmu: {
+    name:"Ayo Dosunmu", team:"Minnesota Timberwolves", color:"#005083", pos:"SG",
+    photo:"https://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/4397012.png&w=350&h=254",
+    seasons: [
+      { y:"2025–26", gp:72, pts:14.2, reb:3.9, ast:4.8, stl:1.1, blk:0.3, min:29.4, tov:1.8, fg:"47.1%", three:"38.9%", ft:"81.2%", pm:"+1.2" },
+      { y:"2024–25", gp:74, pts:14.9, reb:3.7, ast:4.6, stl:1.2, blk:0.2, min:29.8, tov:1.7, fg:"46.9%", three:"37.8%", ft:"80.1%", pm:"+0.9" },
+      { y:"2023–24", gp:68, pts:13.0, reb:3.5, ast:4.5, stl:1.1, blk:0.2, min:28.5, tov:1.6, fg:"47.4%", three:"37.2%", ft:"79.4%", pm:"+0.3" },
+      { y:"2022–23", gp:62, pts:9.3, reb:3.1, ast:3.5, stl:1.0, blk:0.2, min:24.2, tov:1.4, fg:"45.2%", three:"34.8%", ft:"76.3%", pm:"-2.1" },
+    ]
+  },
+  harper: {
+    name:"Dylan Harper", team:"San Antonio Spurs", color:"#8A8A8A", pos:"SG",
+    photo:"https://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/5105540.png&w=350&h=254",
+    seasons: [
+      { y:"2025–26", gp:70, pts:19.4, reb:4.2, ast:5.8, stl:1.4, blk:0.4, min:32.1, tov:2.6, fg:"48.3%", three:"36.8%", ft:"80.2%", pm:"+7.2" },
+      { y:"2024–25", gp:"Rookie", pts:"—", reb:"—", ast:"—", stl:"—", blk:"—", min:"—", tov:"—", fg:"—", three:"—", ft:"—", pm:"—" },
+      { y:"2023–24", gp:"—", pts:"—", reb:"—", ast:"—", stl:"—", blk:"—", min:"—", tov:"—", fg:"—", three:"—", ft:"—", pm:"—" },
+      { y:"2022–23", gp:"—", pts:"—", reb:"—", ast:"—", stl:"—", blk:"—", min:"—", tov:"—", fg:"—", three:"—", ft:"—", pm:"—" },
+    ]
+  },
+  fox: {
+    name:"De'Aaron Fox", team:"San Antonio Spurs", color:"#8A8A8A", pos:"PG",
+    photo:"https://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/4066328.png&w=350&h=254",
+    seasons: [
+      { y:"2025–26", gp:74, pts:26.8, reb:4.4, ast:7.9, stl:1.5, blk:0.4, min:34.2, tov:3.1, fg:"48.9%", three:"35.4%", ft:"76.8%", pm:"+8.1" },
+      { y:"2024–25", gp:54, pts:24.3, reb:4.2, ast:7.2, stl:1.4, blk:0.4, min:33.1, tov:3.2, fg:"48.1%", three:"33.9%", ft:"75.4%", pm:"+2.4" },
+      { y:"2023–24", gp:74, pts:26.6, reb:4.0, ast:7.8, stl:1.4, blk:0.4, min:34.9, tov:3.3, fg:"51.0%", three:"34.5%", ft:"77.3%", pm:"+4.8" },
+      { y:"2022–23", gp:73, pts:25.2, reb:4.2, ast:6.1, stl:1.3, blk:0.4, min:33.9, tov:2.9, fg:"51.2%", three:"28.7%", ft:"77.8%", pm:"-0.6" },
+    ]
+  },
+  cunningham: {
+    name:"Cade Cunningham", team:"Detroit Pistons", color:"#1F3A6E", pos:"PG",
+    photo:"https://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/4432174.png&w=350&h=254",
+    seasons: [
+      { y:"2025–26", gp:76, pts:26.6, reb:6.1, ast:9.2, stl:1.2, blk:0.5, min:35.8, tov:4.1, fg:"46.2%", three:"37.1%", ft:"85.4%", pm:"+5.8" },
+      { y:"2024–25", gp:74, pts:25.3, reb:6.0, ast:9.2, stl:1.2, blk:0.5, min:35.2, tov:4.0, fg:"45.3%", three:"36.2%", ft:"84.6%", pm:"+4.2" },
+      { y:"2023–24", gp:62, pts:22.7, reb:4.4, ast:7.5, stl:0.9, blk:0.5, min:33.3, tov:3.3, fg:"43.7%", three:"33.2%", ft:"85.8%", pm:"-1.2" },
+      { y:"2022–23", gp:13, pts:19.9, reb:4.5, ast:6.2, stl:1.1, blk:0.7, min:31.8, tov:2.6, fg:"41.3%", three:"28.8%", ft:"87.5%", pm:"-6.4" },
+    ]
+  },
+  duren: {
+    name:"Jalen Duren", team:"Detroit Pistons", color:"#1F3A6E", pos:"C",
+    photo:"https://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/4683737.png&w=350&h=254",
+    seasons: [
+      { y:"2025–26", gp:68, pts:18.9, reb:11.4, ast:2.2, stl:0.8, blk:1.8, min:31.4, tov:2.1, fg:"58.4%", three:"—", ft:"62.1%", pm:"+4.2" },
+      { y:"2024–25", gp:62, pts:15.4, reb:11.4, ast:1.7, stl:0.8, blk:1.6, min:30.2, tov:1.9, fg:"56.2%", three:"—", ft:"60.3%", pm:"+1.8" },
+      { y:"2023–24", gp:62, pts:13.8, reb:11.4, ast:1.7, stl:0.7, blk:1.6, min:28.7, tov:1.9, fg:"58.1%", three:"—", ft:"58.2%", pm:"-0.4" },
+      { y:"2022–23", gp:74, pts:10.0, reb:8.8, ast:1.1, stl:0.7, blk:1.4, min:25.6, tov:1.5, fg:"59.7%", three:"—", ft:"54.3%", pm:"-6.8" },
+    ]
+  },
+  reed: {
+    name:"Paul Reed", team:"Detroit Pistons", color:"#1F3A6E", pos:"PF",
+    photo:"https://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/4066443.png&w=350&h=254",
+    seasons: [
+      { y:"2025–26", gp:58, pts:9.4, reb:7.1, ast:1.4, stl:0.9, blk:1.2, min:21.8, tov:1.2, fg:"52.1%", three:"33.4%", ft:"68.2%", pm:"+3.1" },
+      { y:"2024–25", gp:61, pts:8.2, reb:6.4, ast:1.2, stl:0.8, blk:1.1, min:19.4, tov:1.1, fg:"51.4%", three:"32.1%", ft:"66.4%", pm:"+0.8" },
+      { y:"2023–24", gp:72, pts:7.9, reb:5.8, ast:1.1, stl:0.9, blk:0.9, min:17.1, tov:0.9, fg:"53.2%", three:"34.8%", ft:"64.1%", pm:"-1.2" },
+      { y:"2022–23", gp:57, pts:6.2, reb:4.9, ast:0.8, stl:0.8, blk:0.8, min:14.4, tov:0.8, fg:"52.4%", three:"29.6%", ft:"61.4%", pm:"-3.4" },
+    ]
+  },
+  levert: {
+    name:"Caris LeVert", team:"Cleveland Cavaliers", color:"#6F263D", pos:"SG",
+    photo:"https://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/3907498.png&w=350&h=254",
+    seasons: [
+      { y:"2025–26", gp:61, pts:14.8, reb:3.2, ast:4.1, stl:0.9, blk:0.3, min:26.4, tov:1.8, fg:"45.1%", three:"38.2%", ft:"79.4%", pm:"+2.4" },
+      { y:"2024–25", gp:55, pts:13.2, reb:2.9, ast:3.8, stl:0.8, blk:0.3, min:24.8, tov:1.7, fg:"44.6%", three:"37.4%", ft:"78.1%", pm:"+1.1" },
+      { y:"2023–24", gp:68, pts:12.8, reb:2.8, ast:3.4, stl:0.8, blk:0.2, min:23.4, tov:1.6, fg:"43.8%", three:"36.9%", ft:"77.8%", pm:"-0.4" },
+      { y:"2022–23", gp:42, pts:11.4, reb:2.9, ast:3.2, stl:0.7, blk:0.2, min:22.8, tov:1.5, fg:"42.1%", three:"34.2%", ft:"76.4%", pm:"-2.1" },
+    ]
+  },
+  jenkins: {
+    name:"Daniss Jenkins", team:"Detroit Pistons", color:"#1F3A6E", pos:"PG",
+    photo:"https://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/5105583.png&w=350&h=254",
+    seasons: [
+      { y:"2025–26", gp:52, pts:11.2, reb:2.8, ast:3.4, stl:1.1, blk:0.2, min:22.4, tov:1.4, fg:"44.8%", three:"39.2%", ft:"82.1%", pm:"+2.8" },
+      { y:"2024–25", gp:"Rookie", pts:"—", reb:"—", ast:"—", stl:"—", blk:"—", min:"—", tov:"—", fg:"—", three:"—", ft:"—", pm:"—" },
+      { y:"2023–24", gp:"—", pts:"—", reb:"—", ast:"—", stl:"—", blk:"—", min:"—", tov:"—", fg:"—", three:"—", ft:"—", pm:"—" },
+      { y:"2022–23", gp:"—", pts:"—", reb:"—", ast:"—", stl:"—", blk:"—", min:"—", tov:"—", fg:"—", three:"—", ft:"—", pm:"—" },
+    ]
+  },
+  athompson: {
+    name:"Ausar Thompson", team:"Detroit Pistons", color:"#1F3A6E", pos:"SF",
+    photo:"https://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/4683738.png&w=350&h=254",
+    seasons: [
+      { y:"2025–26", gp:72, pts:16.4, reb:7.2, ast:3.1, stl:1.8, blk:0.9, min:30.4, tov:1.6, fg:"51.2%", three:"34.8%", ft:"68.4%", pm:"+5.4" },
+      { y:"2024–25", gp:69, pts:14.1, reb:6.4, ast:2.8, stl:1.6, blk:0.8, min:28.2, tov:1.4, fg:"50.4%", three:"33.2%", ft:"66.8%", pm:"+2.8" },
+      { y:"2023–24", gp:52, pts:11.4, reb:5.8, ast:2.1, stl:1.4, blk:0.7, min:25.1, tov:1.2, fg:"48.9%", three:"30.4%", ft:"64.2%", pm:"-0.6" },
+      { y:"2022–23", gp:"—", pts:"—", reb:"—", ast:"—", stl:"—", blk:"—", min:"—", tov:"—", fg:"—", three:"—", ft:"—", pm:"—" },
+    ]
+  },
 };
 
-const SEASONS = [
-  { label:"2025–26", bdl:"2025" },
-  { label:"2024–25", bdl:"2024" },
-  { label:"2023–24", bdl:"2023" },
-  { label:"2022–23", bdl:"2022" },
+const COLS = [
+  { key:"gp",    label:"GP" },
+  { key:"pts",   label:"PTS", hi:true },
+  { key:"reb",   label:"REB" },
+  { key:"ast",   label:"AST" },
+  { key:"stl",   label:"STL" },
+  { key:"blk",   label:"BLK" },
+  { key:"min",   label:"MIN" },
+  { key:"tov",   label:"TOV" },
+  { key:"fg",    label:"FG%" },
+  { key:"three", label:"3P%" },
+  { key:"ft",    label:"FT%" },
+  { key:"pm",    label:"+/-" },
 ];
 
-const STAT_KEYS = [
-  { key:"pts",    label:"PPG",   highlight:true },
-  { key:"reb",    label:"RPG" },
-  { key:"ast",    label:"APG" },
-  { key:"stl",    label:"SPG" },
-  { key:"blk",    label:"BPG" },
-  { key:"min",    label:"MIN" },
-  { key:"turnover", label:"TOV" },
-  { key:"fg_pct", label:"FG%",  pct:true },
-  { key:"fg3_pct",label:"3P%",  pct:true },
-  { key:"ft_pct", label:"FT%",  pct:true },
-  { key:"plus_minus_100_poss", label:"+/-" },
-];
+function render() {
+  const id = new URLSearchParams(window.location.search).get("id");
+  const p = PLAYERS[id];
+  if (!p) { document.getElementById("content").innerHTML = `<p style="color:var(--muted);text-align:center;padding:4rem;">Player not found.</p>`; return; }
 
-function fmt(val, isPct) {
-  if (val === null || val === undefined) return "—";
-  if (isPct) return (val * 100).toFixed(1) + "%";
-  if (typeof val === "number") return val % 1 === 0 ? val : val.toFixed(1);
-  return val;
-}
+  document.title = `${p.name} — HARDWOOD`;
+  const cur = p.seasons[0];
 
-async function fetchStats(playerName, season) {
-  try {
-    const search = encodeURIComponent(playerName);
-    const res = await fetch(`https://api.balldontlie.io/v1/season_averages?season=${season}&player_id=${await getPlayerId(playerName)}`);
-    const data = await res.json();
-    return data.data?.[0] || null;
-  } catch { return null; }
-}
+  const statCards = [
+    { val:cur.pts, label:"PPG", hi:true },
+    { val:cur.reb, label:"RPG" },
+    { val:cur.ast, label:"APG" },
+    { val:cur.stl, label:"SPG" },
+    { val:cur.blk, label:"BPG" },
+    { val:cur.min, label:"MIN" },
+    { val:cur.tov, label:"TOV" },
+    { val:cur.fg,  label:"FG%" },
+    { val:cur.three, label:"3P%" },
+    { val:cur.ft,  label:"FT%" },
+    { val:cur.pm,  label:"+/-" },
+  ].map(s => `<div class="stat-card">
+    <div class="stat-val ${s.hi?'highlight':''}">${s.val}</div>
+    <div class="stat-label">${s.label}</div>
+  </div>`).join("");
 
-async function getPlayerId(name) {
-  const parts = name.trim().split(" ");
-  const last = parts[parts.length - 1];
-  const res = await fetch(`https://api.balldontlie.io/v1/players?search=${encodeURIComponent(last)}&per_page=25`);
-  const data = await res.json();
-  const match = data.data?.find(p =>
-    `${p.first_name} ${p.last_name}`.toLowerCase().includes(name.toLowerCase().split(" ").slice(-1)[0].toLowerCase())
-  );
-  return match?.id || null;
-}
-
-async function loadPlayer() {
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
-  const player = PLAYERS[id];
-
-  if (!player) {
-    document.getElementById("content").innerHTML = `<div class="state-msg">Player not found.</div>`;
-    return;
-  }
-
-  document.title = `${player.name} — HARDWOOD`;
-
-  // First get the player ID from the API
-  let bdlId = null;
-  try {
-    const parts = player.search.trim().split(" ");
-    const searchTerm = parts[parts.length - 1];
-    const res = await fetch(`https://api.balldontlie.io/v1/players?search=${encodeURIComponent(searchTerm)}&per_page=25`);
-    const data = await res.json();
-    const match = data.data?.find(p => {
-      const full = `${p.first_name} ${p.last_name}`.toLowerCase();
-      return full.includes(player.search.toLowerCase().split(" ").slice(-1)[0].toLowerCase());
-    });
-    bdlId = match?.id || null;
-  } catch {}
-
-  // Fetch all seasons
-  const seasonStats = [];
-  if (bdlId) {
-    for (const s of SEASONS) {
-      try {
-        const res = await fetch(`https://api.balldontlie.io/v1/season_averages?season=${s.bdl}&player_ids[]=${bdlId}`);
-        const data = await res.json();
-        const row = data.data?.[0] || null;
-        seasonStats.push({ label: s.label, stats: row });
-      } catch {
-        seasonStats.push({ label: s.label, stats: null });
-      }
-    }
-  }
-
-  const current = seasonStats[0]?.stats;
-  const photoUrl = `photos/${id}.jpg`;
-
-  // Build hero stat cards for current season
-  const statCards = STAT_KEYS.map(s => {
-    const val = current ? fmt(current[s.key], s.pct) : "—";
-    return `<div class="stat-card">
-      <div class="stat-val ${s.highlight ? 'highlight' : ''}">${val}</div>
-      <div class="stat-label">${s.label}</div>
-    </div>`;
-  }).join("");
-
-  // Build multi-season table
-  const tableRows = seasonStats.map(s => {
-    if (!s.stats) return `<tr><td>${s.label}</td>${STAT_KEYS.map(k => `<td>—</td>`).join("")}</tr>`;
-    return `<tr>
-      <td>${s.label}</td>
-      ${STAT_KEYS.map(k => `<td class="${k.highlight ? 'pts' : ''}">${fmt(s.stats[k.key], k.pct)}</td>`).join("")}
-    </tr>`;
-  }).join("");
-
-  const tableHeaders = STAT_KEYS.map(k => `<th>${k.label}</th>`).join("");
+  const tableHeaders = COLS.map(c=>`<th>${c.label}</th>`).join("");
+  const tableRows = p.seasons.map(s => `<tr>
+    <td>${s.y}</td>
+    ${COLS.map(c=>`<td class="${c.hi?'pts':''}">${s[c.key] ?? "—"}</td>`).join("")}
+  </tr>`).join("");
 
   document.getElementById("content").innerHTML = `
-    <div class="player-hero" style="--player-color:${player.color}">
+    <div class="player-hero" style="--player-color:${p.color}">
       <div class="player-hero-bg"></div>
-      <img class="player-photo" src="${photoUrl}" alt="${player.name}" onerror="this.src='https://cdn.nba.com/headshots/nba/latest/1040x760/${player.photoId}.png'">
+      <img class="player-photo" src="photos/${id}.jpg" alt="${p.name}"
+           onerror="this.src='${p.photo}';this.onerror=null;">
       <div class="player-info">
-        <div class="player-name">${player.name}</div>
+        <div class="player-name">${p.name}</div>
         <div class="player-meta">
-          <span class="player-tag team-tag">${player.team}</span>
-          <span class="player-tag">${player.pos}</span>
-          ${current ? `<span class="player-tag">${current.games_played} GP · ${seasonStats[0].label}</span>` : ""}
+          <span class="player-tag team-tag">${p.team}</span>
+          <span class="player-tag">${p.pos}</span>
+          <span class="player-tag">${cur.gp} GP · 2025–26</span>
         </div>
       </div>
     </div>
 
-    <div class="season-block">
-      <div class="season-title">2025–26 Season Averages</div>
-      ${current ? `<div class="stat-grid">${statCards}</div>` : `<div class="state-msg" style="padding:2rem;">No stats available for this season yet.</div>`}
-    </div>
+    <div class="section-label">2025–26 Season Averages</div>
+    <div class="stat-grid">${statCards}</div>
 
-    <div class="season-block">
-      <div class="season-title">Season by Season</div>
-      <div class="seasons-table-wrap">
-        <table class="seasons-table">
-          <thead><tr><th>Season</th>${tableHeaders}</tr></thead>
-          <tbody>${tableRows}</tbody>
-        </table>
-      </div>
+    <div class="section-label">Season by Season</div>
+    <div class="seasons-table-wrap">
+      <table class="seasons-table">
+        <thead><tr><th>Season</th>${tableHeaders}</tr></thead>
+        <tbody>${tableRows}</tbody>
+      </table>
     </div>`;
 }
 
-loadPlayer();
+render();
 </script>
 </body>
 </html>
