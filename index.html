@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARDWOOD — NBA Central</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #FF6B35;
+    --court: #C8A96E;
+    --ink: #0D0D0D;
+    --off-white: #F5F2ED;
+    --muted: #777;
+    --card-bg: #161616;
+    --border: #252525;
+    --border-light: #2E2E2E;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--off-white);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(13,13,13,0.94);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2.5rem; height: 58px;
+  }
+  .logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.9rem; letter-spacing: 0.12em; color: var(--off-white); }
+  .logo span { color: var(--orange); }
+
+  nav { display: flex; }
+  nav button {
+    background: none; border: none; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+    padding: 0 1.1rem; height: 58px;
+    border-bottom: 2px solid transparent;
+    transition: color 0.18s, border-color 0.18s;
+  }
+  nav button:hover { color: var(--off-white); }
+  nav button.active { color: var(--off-white); border-bottom-color: var(--orange); }
+
+  .live-badge { display:flex; align-items:center; gap:6px; font-size:0.68rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--orange); }
+  .live-dot { width:6px; height:6px; border-radius:50%; background:var(--orange); animation:pulse 1.6s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(0.65)} }
+
+  /* TICKER */
+  .ticker-wrap { background:var(--orange); overflow:hidden; height:33px; display:flex; align-items:center; }
+  .ticker-label { background:var(--ink); color:var(--orange); font-family:'Bebas Neue',sans-serif; font-size:0.95rem; letter-spacing:0.14em; padding:0 1.1rem; height:100%; display:flex; align-items:center; flex-shrink:0; }
+  .ticker-track { display:flex; animation:ticker 45s linear infinite; white-space:nowrap; }
+  .ticker-item { font-size:0.75rem; font-weight:700; color:var(--ink); padding:0 2.5rem; letter-spacing:0.04em; }
+  .ticker-item em { opacity:0.5; font-style:normal; margin-right:0.5rem; }
+  @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  /* LAYOUT */
+  .container { max-width:1180px; margin:0 auto; padding:0 1.5rem; }
+
+  .section-label {
+    font-family:'Bebas Neue',sans-serif; font-size:0.8rem; letter-spacing:0.22em;
+    color:var(--orange); text-transform:uppercase;
+    display:flex; align-items:center; gap:0.8rem; margin-bottom:1.2rem;
+  }
+  .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+  .tab-content { display:none; }
+  .tab-content.active { display:block; }
+
+  /* SCORES */
+  #scores-tab { padding:2rem 0 3rem; }
+  .games-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:1rem; margin-bottom:2.5rem; }
+
+  .game-card {
+    background:var(--card-bg); border:1px solid var(--border);
+    border-radius:14px; overflow:hidden;
+    animation:fadeUp 0.35s ease both; transition:border-color 0.2s;
+  }
+  .game-card:hover { border-color:var(--border-light); }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+
+  .card-header {
+    background:#1A1A1A; padding:0.55rem 1rem;
+    display:flex; align-items:center; justify-content:space-between;
+    border-bottom:1px solid var(--border);
+  }
+  .card-meta { font-size:0.68rem; font-weight:600; letter-spacing:0.07em; text-transform:uppercase; color:var(--muted); }
+  .status-pill { font-size:0.65rem; font-weight:700; letter-spacing:0.07em; text-transform:uppercase; padding:2px 8px; border-radius:20px; }
+  .pill-final { background:#ffffff0D; color:#555; }
+  .pill-upcoming { background:#3B82F618; color:#60A5FA; }
+
+  .team-row { padding:0.85rem 1rem; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); }
+  .team-row:last-of-type { border-bottom:none; }
+
+  .team-left { display:flex; align-items:center; gap:0.7rem; }
+  .team-chip { width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-family:'Bebas Neue',sans-serif; font-size:0.78rem; letter-spacing:0.04em; flex-shrink:0; }
+  .team-label { font-weight:500; font-size:0.9rem; }
+  .team-sub { font-size:0.68rem; color:var(--muted); }
+
+  .score-val { font-family:'Bebas Neue',sans-serif; font-size:1.65rem; letter-spacing:0.02em; line-height:1; }
+  .score-val.winner { color:var(--off-white); }
+  .score-val.loser { color:#333; }
+  .score-val.tbd { color:#2A2A2A; font-size:1rem; }
+
+  .win-prob-bar { padding:0.65rem 1rem 0.75rem; background:#111; border-top:1px solid var(--border); }
+  .wp-labels { display:flex; justify-content:space-between; font-size:0.68rem; font-weight:700; color:var(--muted); margin-bottom:0.35rem; }
+  .wp-track { height:4px; border-radius:2px; background:#2A2A2A; overflow:hidden; }
+  .wp-fill { height:100%; border-radius:2px; background:var(--orange); }
+
+  /* GAME NOTES */
+  .game-notes { padding:0.85rem 1rem 1rem; background:#0F0F0F; border-top:1px solid var(--border); }
+  .notes-label {
+    font-size:0.63rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--court); display:flex; align-items:center; gap:0.45rem; margin-bottom:0.6rem;
+  }
+  .notes-label svg { opacity:0.8; }
+  .notes-text { font-size:0.875rem; line-height:1.7; color:#ADA79F; font-style:italic; }
+
+  /* STANDINGS */
+  #standings-tab { padding:2rem 0 3rem; }
+  .conf-split { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+
+  .standings-card { background:var(--card-bg); border:1px solid var(--border); border-radius:14px; overflow:hidden; }
+  .standings-head { background:#1A1A1A; padding:0.7rem 1rem; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); font-family:'Bebas Neue',sans-serif; font-size:1rem; letter-spacing:0.12em; }
+  .playoffs-note { font-family:'DM Sans',sans-serif; font-size:0.63rem; font-weight:600; color:var(--muted); letter-spacing:0.06em; text-transform:uppercase; }
+
+  .s-cols { display:grid; grid-template-columns:28px 1fr 46px 46px 58px; padding:0.4rem 1rem; font-size:0.65rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); border-bottom:1px solid var(--border); }
+  .s-row { display:grid; grid-template-columns:28px 1fr 46px 46px 58px; padding:0.5rem 1rem; border-bottom:1px solid #181818; align-items:center; font-size:0.86rem; transition:background 0.15s; }
+  .s-row:hover { background:#1C1C1C; }
+  .s-row:last-child { border-bottom:none; }
+  .s-rank { color:var(--muted); font-size:0.75rem; font-weight:700; }
+  .s-team { font-weight:500; }
+  .s-w { font-weight:700; text-align:center; }
+  .s-l { color:var(--muted); text-align:center; }
+  .s-pct { font-family:'Bebas Neue',sans-serif; font-size:1rem; letter-spacing:0.04em; color:var(--orange); text-align:right; }
+  .playoff-cut { border-top:1px solid #FF6B3540 !important; }
+
+  /* BRACKET */
+  #bracket-tab { padding:2rem 0 3rem; }
+  .bracket-split { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  .bracket-conf-title { font-family:'Bebas Neue',sans-serif; font-size:1.05rem; letter-spacing:0.14em; padding-bottom:0.6rem; margin-bottom:1.1rem; border-bottom:1px solid var(--border); }
+  .bracket-round { margin-bottom:1.4rem; }
+  .round-name { font-size:0.67rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-bottom:0.55rem; }
+
+  .matchup { background:var(--card-bg); border:1px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:0.6rem; }
+  .matchup-meta { background:#111; padding:0.3rem 0.85rem; font-size:0.63rem; font-weight:700; letter-spacing:0.07em; text-transform:uppercase; color:var(--muted); border-bottom:1px solid var(--border); display:flex; justify-content:space-between; }
+  .live-tag { color:var(--orange); }
+  .matchup-row { padding:0.55rem 0.85rem; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); font-size:0.88rem; }
+  .matchup-row:last-child { border-bottom:none; }
+  .matchup-row.is-winner { background:#FF6B350A; }
+  .matchup-row.is-out { opacity:0.3; }
+  .m-team { font-weight:600; }
+  .m-seed { font-size:0.72rem; color:var(--muted); font-weight:400; }
+  .m-wins { font-family:'Bebas Neue',sans-serif; font-size:1.15rem; color:var(--orange); }
+  .m-wins.out { color:#2A2A2A; }
+
+  .finals-badge { background:linear-gradient(135deg,#1A1408,#0D0D0D); border:1px solid var(--court); border-radius:10px; overflow:hidden; margin-bottom:0.6rem; }
+  .finals-badge .matchup-meta { background:#130F05; color:var(--court); border-color:#2A2010; }
+  .finals-badge .matchup-row { border-color:#2A2010; }
+
+  /* STORIES */
+  #stories-tab { padding:2rem 0 4rem; }
+
+  .article-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px; overflow: hidden;
+    max-width: 820px; margin: 0 auto;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .article-header {
+    padding: 2.5rem 2.5rem 1.75rem;
+    border-bottom: 1px solid var(--border);
+    background: #131313;
+  }
+  .article-kicker {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--orange);
+    margin-bottom: 0.75rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .article-kicker::before { content:''; display:inline-block; width:20px; height:2px; background:var(--orange); border-radius:2px; }
+  .article-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.6rem; line-height: 1.05; letter-spacing: 0.04em;
+    color: var(--off-white); margin-bottom: 1rem;
+  }
+  .article-byline {
+    display: flex; align-items: center; gap: 1rem;
+    font-size: 0.78rem; color: var(--muted);
+  }
+  .author-badge {
+    background: var(--orange); color: var(--ink);
+    font-weight: 700; font-size: 0.7rem; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 3px 10px; border-radius: 20px;
+  }
+
+  .article-body { padding: 0 2.5rem 2.5rem; }
+
+  .story-section {
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    margin-top: 2rem;
+  }
+  .story-section:first-child { border-top: none; margin-top: 0; padding-top: 2rem; }
+
+  .story-section-header {
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 1.4rem;
+  }
+  .matchup-chip {
+    display: flex; align-items: center; gap: 0.4rem;
+    background: #1E1E1E; border: 1px solid var(--border);
+    border-radius: 8px; padding: 0.4rem 0.75rem;
+  }
+  .mc-team {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.95rem; letter-spacing: 0.06em;
+  }
+  .mc-vs { font-size: 0.65rem; color: var(--muted); font-weight: 700; }
+  .mc-game { font-size: 0.68rem; color: var(--muted); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+
+  .story-prediction {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: #FF6B3512; border: 1px solid #FF6B3530;
+    border-radius: 8px; padding: 0.5rem 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .pred-label { font-size: 0.63rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .pred-text { font-size: 0.88rem; font-weight: 700; color: var(--orange); }
+
+  .story-placeholder {
+    background: #111; border: 1px dashed var(--border);
+    border-radius: 10px; padding: 2rem;
+    text-align: center; color: var(--muted);
+    font-size: 0.85rem; font-style: italic;
+  }
+
+  .article-body p {
+    font-size: 1rem; line-height: 1.82;
+    color: #C8C1BA; margin-bottom: 1.1rem;
+    font-weight: 300;
+  }
+  .article-body p:last-child { margin-bottom: 0; }
+  .article-body strong { color: var(--off-white); font-weight: 600; }
+
+  /* FOOTER */
+  footer { border-top:1px solid var(--border); padding:1.4rem 2.5rem; display:flex; align-items:center; justify-content:space-between; font-size:0.72rem; color:var(--muted); margin-top:1rem; }
+
+  @media(max-width:760px) {
+    .conf-split, .bracket-split { grid-template-columns:1fr; }
+    nav button { padding:0 0.6rem; font-size:0.7rem; }
+    header { padding:0 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">HARD<span>WOOD</span></div>
+  <nav>
+    <button class="active" onclick="showTab('scores')">Scores</button>
+    <button onclick="showTab('standings')">Standings</button>
+    <button onclick="showTab('bracket')">Bracket</button>
+    <button onclick="showTab('stories')">Stories</button>
+  </nav>
+  <div class="live-badge"><div class="live-dot"></div>2026 Playoffs</div>
+</header>
+
+<div class="ticker-wrap">
+  <div class="ticker-label">LATEST</div>
+  <div class="ticker-track" id="ticker"></div>
+</div>
+
+<div class="container">
+
+  <div id="scores-tab" class="tab-content active">
+    <div style="padding:1.75rem 0 0.25rem"><div class="section-label">Upcoming Games</div></div>
+    <div class="games-grid" id="upcoming-grid"></div>
+    <div class="section-label">Recent Results</div>
+    <div class="games-grid" id="recent-grid"></div>
+  </div>
+
+  <div id="standings-tab" class="tab-content">
+    <div style="padding:1.75rem 0 0.25rem"><div class="section-label">2025–26 Season Standings</div></div>
+    <div class="conf-split">
+      <div id="east-table"></div>
+      <div id="west-table"></div>
+    </div>
+  </div>
+
+  <div id="bracket-tab" class="tab-content">
+    <div style="padding:1.75rem 0 0.25rem"><div class="section-label">2026 NBA Playoffs</div></div>
+    <div class="bracket-split">
+      <div id="east-bracket"></div>
+      <div id="west-bracket"></div>
+    </div>
+  </div>
+
+  <div id="stories-tab" class="tab-content">
+    <div style="padding:1.75rem 0 0.25rem"><div class="section-label">Stories</div></div>
+
+    <div class="article-card">
+
+      <div class="article-header">
+        <div class="article-kicker">Game 6 Preview · May 15, 2026</div>
+        <div class="article-title">Game 6 Predictions</div>
+        <div class="article-byline">
+          <span class="author-badge">By Owen Larson</span>
+          <span>May 15, 2026 &nbsp;·&nbsp; 2026 NBA Playoffs</span>
+        </div>
+      </div>
+
+      <div class="article-body">
+
+        <!-- SPURS vs TIMBERWOLVES -->
+        <div class="story-section">
+          <div class="story-section-header">
+            <div class="matchup-chip">
+              <span class="mc-team" style="color:#8A8A8A">SAS</span>
+              <span class="mc-vs">vs</span>
+              <span class="mc-team" style="color:#005083">MIN</span>
+            </div>
+            <span class="mc-game">West Semis · Game 6</span>
+          </div>
+
+          <div class="story-prediction">
+            <span class="pred-label">Prediction</span>
+            <span class="pred-text">Spurs Close It Out in 6</span>
+          </div>
+
+          <p>I think the high-octane offense of the Spurs will overwhelm the Timberwolves in Game 6. Wembanyama has been a problem for them all series, and I don't see a world where they'll be able to stop him tonight. If I'm Chris Finch, I'd do my best to orchestrate a game plan that attempts to lower Wembanyama's usage rate. Even when he struggles from the field and doesn't see the ball go through the net, his presence alone allows him to single-handedly affect the game.</p>
+
+          <p>In the minutes Wembanyama has been off the court, the Spurs have had a negative net rating. The Timberwolves need to use these minutes to go on their runs. If they can continue to win the minutes when he's off the court and do enough to slow down the Spurs' offense when he's on it, they can come away with a Game 6 win.</p>
+
+          <p>However, that starts with the looks they get on offense. In Game 5, they relied on too many threes. There were numerous times in the first quarter where the likes of <strong>Julius Randle</strong> and <strong>Ayo Dosunmu</strong> spotted up for three on a fastbreak opportunity. They need to limit the number of threes taken and attack the paint when Wemby is not in the lineup. However, I think that identity needs to stay the same even when Wemby is in the game. Although his defensive force is unquestionable, Wembanyama lacks in strength. Julius Randle — one of, if not the most, physical players in the NBA — needs to continue to use his body to get into the chest of Wembanyama. The more the Timberwolves drive, the more they can get to the free-throw line or put Wemby in foul trouble.</p>
+
+          <p>As for <strong>Anthony Edwards</strong>, Chris Finch needs to draw up more plays to get Ant the ball more often. In Game 1, Edwards was making some very difficult shots, but those shots stopped falling in subsequent games. For Ant to be a more consistent offensive threat, the Timberwolves need to incorporate Edwards in more screening actions — whether that's a flare screen where he's the motion man, or a back screen where he receives the ball in the mid-post. Edwards needs to be more deeply embedded in the offense.</p>
+
+          <p>However, I think the supporting cast around Wembanyama will ultimately be too much for the Timberwolves. <strong>Dylan Harper</strong> is playing like a seasoned veteran right now, and <strong>De'Aaron Fox</strong> is finally remembering he has the most dangerous pick-and-roll center in the NBA. If the Spurs can continue to use Wemby in pick-and-rolls and keep hitting from three, I think they walk away tonight with the opportunity to face the <strong>Oklahoma City Thunder</strong> in the Western Conference Finals.</p>
+        </div>
+
+        <!-- CAVALIERS vs PISTONS -->
+        <div class="story-section">
+          <div class="story-section-header">
+            <div class="matchup-chip">
+              <span class="mc-team" style="color:#6F263D">CLE</span>
+              <span class="mc-vs">vs</span>
+              <span class="mc-team" style="color:#1F3A6E">DET</span>
+            </div>
+            <span class="mc-game">East Semis · Game 6</span>
+          </div>
+
+          <div class="story-prediction">
+            <span class="pred-label">Prediction</span>
+            <span class="pred-text">Pistons Fight Back to Force a Game 7</span>
+          </div>
+
+          <p>If the Detroit Pistons want to extend their season, <strong>Jalen Duren</strong> needs to show up. The All-Star center who averaged nearly 20 points and 11 rebounds per game has looked lost this entire series. His hesitation to shoot on the offensive end has not only put the Pistons in a win-or-go-home scenario, but has reportedly given the front office pause about offering him a max extension.</p>
+
+          <p>JB Bickerstaff has spoken to the media about bringing in <strong>Paul Reed</strong> when the Pistons needed a spark off the bench, and in almost every game Reed has outplayed Duren in the limited minutes he's received. If I'm Bickerstaff, with my back against the wall, I'm utilizing Paul Reed more in Game 6. His energy has been contagious all series long, and his physicality has tested the Cavaliers' frontcourt every single night.</p>
+
+          <p>Although Game 6 will be in "The Land" — one of the toughest environments in the NBA to play in — I think the Pistons will come away with a victory if Reed and <strong>Caris LeVert</strong> see more minutes today. Their juice off the bench, both offensively and defensively, has challenged the Cavs' stars in recent games and given Detroit a different look that Cleveland has struggled to adjust to.</p>
+
+          <p>However, the Pistons need to limit their turnovers. With <strong>Cade Cunningham</strong> operating as the star guard at an extremely high usage rate, turnovers are almost inevitable on his part — but his playmaking and scoring will cancel out those mistakes on most nights. What the Pistons really need to reduce are the turnovers when the ball isn't in his hands. <strong>Daniss Jenkins</strong> has been on a heater from three-point range over the last couple of games, and <strong>Ausar Thompson</strong> has been a menace defensively, so as long as Cunningham's supporting cast continues to play well, I see the Pistons forcing a Game 7.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="logo" style="font-size:1.1rem;">HARD<span>WOOD</span></div>
+  <div>SportRadar data &nbsp;·&nbsp; Updated May 14, 2026 &nbsp;·&nbsp; Notes by Owen</div>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// OWEN'S GAME NOTES
+// Each key is the game ID. Claude will insert notes here when Owen shares them.
+// ═══════════════════════════════════════════════════════════════════════════
+const NOTES = {
+  // "7d95ee0e": "Your note about DET vs ORL Game 7 here.",
+};
+
+// ═══════════════════════════════════════════════════════════════════════════
+// GAME DATA
+// ═══════════════════════════════════════════════════════════════════════════
+const GAMES = [
+  {id:"7d95ee0e",status:"closed",home:"DET",away:"ORL",title:"Game 7 · First Round",score:{DET:116,ORL:94},local_start:"Sun May 3"},
+  {id:"09d229d9",status:"closed",home:"CLE",away:"TOR",title:"Game 7 · First Round",score:{CLE:114,TOR:102},local_start:"Sun May 3"},
+  {id:"3252a63c",status:"closed",home:"NYK",away:"PHI",title:"Game 1 · East Semis",score:{NYK:137,PHI:98},local_start:"Mon May 4"},
+  {id:"92b3b712",status:"closed",home:"SAS",away:"MIN",title:"Game 1 · West Semis",score:{SAS:102,MIN:104},local_start:"Mon May 4"},
+  {id:"90b3c50b",status:"closed",home:"DET",away:"CLE",title:"Game 1 · East Semis",score:{DET:111,CLE:101},local_start:"Tue May 5"},
+  {id:"e8156977",status:"closed",home:"OKC",away:"LAL",title:"Game 1 · West Semis",score:{OKC:108,LAL:90},local_start:"Tue May 5"},
+  {id:"98d790be",status:"closed",home:"NYK",away:"PHI",title:"Game 2 · East Semis",score:{NYK:108,PHI:102},local_start:"Wed May 6"},
+  {id:"726bd6c3",status:"closed",home:"SAS",away:"MIN",title:"Game 2 · West Semis",score:{SAS:133,MIN:95},local_start:"Wed May 6"},
+  {id:"575f9ecc",status:"closed",home:"DET",away:"CLE",title:"Game 2 · East Semis",score:{DET:107,CLE:97},local_start:"Thu May 7"},
+  {id:"a28be564",status:"closed",home:"OKC",away:"LAL",title:"Game 2 · West Semis",score:{OKC:125,LAL:107},local_start:"Thu May 7"},
+  {id:"6782bb48",status:"closed",home:"PHI",away:"NYK",title:"Game 3 · East Semis",score:{PHI:94,NYK:108},local_start:"Fri May 8"},
+  {id:"8a9ba7d2",status:"closed",home:"MIN",away:"SAS",title:"Game 3 · West Semis",score:{MIN:108,SAS:115},local_start:"Fri May 8"},
+  {id:"ca76c989",status:"closed",home:"CLE",away:"DET",title:"Game 3 · East Semis",score:{CLE:116,DET:109},local_start:"Sat May 9"},
+  {id:"5a4e97f4",status:"closed",home:"LAL",away:"OKC",title:"Game 3 · West Semis",score:{LAL:108,OKC:131},local_start:"Sat May 9"},
+  {id:"4bffcde5",status:"closed",home:"PHI",away:"NYK",title:"Game 4 · East Semis",score:{PHI:114,NYK:144},local_start:"Sun May 10"},
+  {id:"7b29ddc3",status:"closed",home:"MIN",away:"SAS",title:"Game 4 · West Semis",score:{MIN:114,SAS:109},local_start:"Sun May 10"},
+  {id:"749f669c",status:"closed",home:"CLE",away:"DET",title:"Game 4 · East Semis",score:{CLE:112,DET:103},local_start:"Mon May 11"},
+  {id:"c7d58d46",status:"closed",home:"LAL",away:"OKC",title:"Game 4 · West Semis",score:{LAL:110,OKC:115},local_start:"Mon May 11"},
+  {id:"da78daaa",status:"closed",home:"SAS",away:"MIN",title:"Game 5 · West Semis",score:{SAS:126,MIN:97},local_start:"Tue May 12"},
+  {id:"1e038da7",status:"closed",home:"DET",away:"CLE",title:"Game 5 · East Semis",score:{DET:113,CLE:117},local_start:"Wed May 13"},
+  {id:"0b4308fe",status:"scheduled",home:"CLE",away:"DET",title:"Game 6 · East Semis",win_probability:{CLE:60.3,DET:39.7},local_start:"Fri May 15, 7:00 PM EDT"},
+  {id:"f616f274",status:"scheduled",home:"MIN",away:"SAS",title:"Game 6 · West Semis",win_probability:{MIN:36,SAS:64},local_start:"Fri May 15, 9:30 PM EDT"},
+];
+
+const PLAYOFFS = [
+  {label:"E · R1",conf:"east",round:1,status:"closed",p:[{t:"DET",s:1,w:4},{t:"ORL",s:8,w:3}]},
+  {label:"E · R1",conf:"east",round:1,status:"closed",p:[{t:"PHI",s:7,w:4},{t:"BOS",s:2,w:3}]},
+  {label:"E · R1",conf:"east",round:1,status:"closed",p:[{t:"NYK",s:3,w:4},{t:"ATL",s:6,w:2}]},
+  {label:"E · R1",conf:"east",round:1,status:"closed",p:[{t:"CLE",s:4,w:4},{t:"TOR",s:5,w:3}]},
+  {label:"W · R1",conf:"west",round:1,status:"closed",p:[{t:"OKC",s:1,w:4},{t:"PHX",s:8,w:0}]},
+  {label:"W · R1",conf:"west",round:1,status:"closed",p:[{t:"SAS",s:2,w:4},{t:"POR",s:7,w:1}]},
+  {label:"W · R1",conf:"west",round:1,status:"closed",p:[{t:"MIN",s:6,w:4},{t:"DEN",s:3,w:2}]},
+  {label:"W · R1",conf:"west",round:1,status:"closed",p:[{t:"LAL",s:4,w:4},{t:"HOU",s:5,w:2}]},
+  {label:"E · Semis",conf:"east",round:2,status:"closed",p:[{t:"NYK",s:3,w:4},{t:"PHI",s:7,w:0}]},
+  {label:"E · Semis",conf:"east",round:2,status:"inprogress",p:[{t:"CLE",s:4,w:3},{t:"DET",s:1,w:2}]},
+  {label:"W · Semis",conf:"west",round:2,status:"inprogress",p:[{t:"SAS",s:2,w:3},{t:"MIN",s:6,w:2}]},
+  {label:"W · Semis",conf:"west",round:2,status:"closed",p:[{t:"OKC",s:1,w:4},{t:"LAL",s:4,w:0}]},
+  {label:"ECF",conf:"east",round:3,status:"scheduled",p:[{t:"NYK",s:3,w:0},{t:"TBD",s:null,w:0}]},
+  {label:"WCF",conf:"west",round:3,status:"scheduled",p:[{t:"OKC",s:1,w:0},{t:"TBD",s:null,w:0}]},
+  {label:"NBA Finals",conf:"finals",round:4,status:"scheduled",p:[{t:"TBD",s:null,w:0},{t:"TBD",s:null,w:0}]},
+];
+
+const STANDINGS = {
+  east:[
+    {t:"Boston Celtics",a:"BOS",w:56,l:26,pct:0.683},
+    {t:"New York Knicks",a:"NYK",w:53,l:29,pct:0.646},
+    {t:"Detroit Pistons",a:"DET",w:60,l:22,pct:0.732},
+    {t:"Cleveland Cavaliers",a:"CLE",w:52,l:30,pct:0.634},
+    {t:"Toronto Raptors",a:"TOR",w:46,l:36,pct:0.561},
+    {t:"Atlanta Hawks",a:"ATL",w:46,l:36,pct:0.561},
+    {t:"Philadelphia 76ers",a:"PHI",w:45,l:37,pct:0.549},
+    {t:"Orlando Magic",a:"ORL",w:45,l:37,pct:0.549},
+    {t:"Charlotte Hornets",a:"CHA",w:44,l:38,pct:0.537},
+    {t:"Miami Heat",a:"MIA",w:43,l:39,pct:0.524},
+    {t:"Milwaukee Bucks",a:"MIL",w:32,l:50,pct:0.390},
+    {t:"Chicago Bulls",a:"CHI",w:31,l:51,pct:0.378},
+    {t:"Brooklyn Nets",a:"BKN",w:20,l:62,pct:0.244},
+    {t:"Indiana Pacers",a:"IND",w:19,l:63,pct:0.232},
+    {t:"Washington Wizards",a:"WAS",w:17,l:65,pct:0.207},
+  ],
+  west:[
+    {t:"Oklahoma City Thunder",a:"OKC",w:64,l:18,pct:0.780},
+    {t:"San Antonio Spurs",a:"SAS",w:62,l:20,pct:0.756},
+    {t:"Denver Nuggets",a:"DEN",w:54,l:28,pct:0.659},
+    {t:"Los Angeles Lakers",a:"LAL",w:53,l:29,pct:0.646},
+    {t:"Houston Rockets",a:"HOU",w:52,l:30,pct:0.634},
+    {t:"Minnesota Timberwolves",a:"MIN",w:49,l:33,pct:0.598},
+    {t:"Portland Trail Blazers",a:"POR",w:42,l:40,pct:0.512},
+    {t:"LA Clippers",a:"LAC",w:42,l:40,pct:0.512},
+    {t:"Phoenix Suns",a:"PHX",w:45,l:37,pct:0.549},
+    {t:"Golden State Warriors",a:"GSW",w:37,l:45,pct:0.451},
+    {t:"New Orleans Pelicans",a:"NOP",w:26,l:56,pct:0.317},
+    {t:"Dallas Mavericks",a:"DAL",w:26,l:56,pct:0.317},
+    {t:"Memphis Grizzlies",a:"MEM",w:25,l:57,pct:0.305},
+    {t:"Sacramento Kings",a:"SAC",w:22,l:60,pct:0.268},
+    {t:"Utah Jazz",a:"UTA",w:22,l:60,pct:0.268},
+  ]
+};
+
+const COLORS = {
+  DET:'#1F3A6E',CLE:'#6F263D',NYK:'#006BB6',PHI:'#003DA5',SAS:'#8A8A8A',
+  MIN:'#005083',OKC:'#007AC1',LAL:'#552583',ORL:'#0077C0',TOR:'#CE1124',
+  ATL:'#E03A3E',BOS:'#007A33',MIL:'#00471B',CHI:'#CE1141',MIA:'#98002E',
+  PHX:'#1D1160',DEN:'#0E2240',HOU:'#CE1141',POR:'#E03A3E',GSW:'#1D428A',
+  DAL:'#00538C',MEM:'#5D76A9',SAC:'#5A2D81',NOP:'#0C2340',UTA:'#002B5C',
+  CHA:'#1D1160',IND:'#002D62',BKN:'#222',WAS:'#002B5C',LAC:'#C8102E',TBD:'#333'
+};
+
+function chip(abbr) {
+  const c = COLORS[abbr]||'#333';
+  return `<div class="team-chip" style="background:${c}22;color:${c};">${abbr}</div>`;
+}
+
+// TICKER
+function buildTicker() {
+  const items = [
+    'CLE leads DET 3–2 · East Semis Game 6 on Friday',
+    'SAS leads MIN 3–2 · West Semis Game 6 on Friday',
+    'NYK sweep PHI 4–0 · Advance to Eastern Conference Finals',
+    'OKC sweep LAL 4–0 · Advance to Western Conference Finals',
+    'PHI upset BOS 4–3 in First Round',
+    'MIN upset DEN 4–2 in First Round',
+    'NBA Finals begin June 4',
+    'OKC Thunder finish 64–18, best record in the West',
+  ];
+  const d = [...items,...items];
+  document.getElementById('ticker').innerHTML = d.map(s=>`<span class="ticker-item"><em>▸</em>${s}</span>`).join('');
+}
+
+// SCORES
+function buildScores() {
+  const upcoming = GAMES.filter(g=>g.status==='scheduled');
+  const recent   = GAMES.filter(g=>g.status==='closed').reverse().slice(0,10);
+  renderGames('upcoming-grid', upcoming);
+  renderGames('recent-grid', recent);
+}
+
+function renderGames(id, list) {
+  const el = document.getElementById(id);
+  if (!list.length) { el.innerHTML='<p style="color:var(--muted);padding:0.5rem 0 1.5rem;">No games to show.</p>'; return; }
+  el.innerHTML = list.map((g,i) => gameCard(g,i)).join('');
+}
+
+function gameCard(g, i) {
+  const {home,away,score,win_probability:wp,status,title,local_start,id} = g;
+  const isScheduled = status==='scheduled';
+  const winner = score ? (score[home]>score[away]?home:away) : null;
+
+  const pill = isScheduled
+    ? `<span class="status-pill pill-upcoming">Upcoming</span>`
+    : `<span class="status-pill pill-final">Final</span>`;
+
+  const row = (team, isHome) => {
+    const isWin = winner===team;
+    const scoreHtml = isScheduled
+      ? `<span class="score-val tbd">—</span>`
+      : `<span class="score-val ${isWin?'winner':'loser'}">${score[team]}</span>`;
+    return `<div class="team-row">
+      <div class="team-left">${chip(team)}<div><div class="team-label">${team}</div><div class="team-sub">${isHome?'Home':'Away'}</div></div></div>
+      ${scoreHtml}
+    </div>`;
+  };
+
+  const wpHtml = (isScheduled&&wp) ? `
+    <div class="win-prob-bar">
+      <div class="wp-labels"><span>${home} ${wp[home].toFixed(0)}%</span><span style="font-size:0.63rem;letter-spacing:0.07em;">WIN PROBABILITY</span><span>${away} ${wp[away].toFixed(0)}%</span></div>
+      <div class="wp-track"><div class="wp-fill" style="width:${wp[home]}%"></div></div>
+    </div>` : '';
+
+  const note = NOTES[id];
+  const notesHtml = (!isScheduled&&note) ? `
+    <div class="game-notes">
+      <div class="notes-label">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Owen's Notes
+      </div>
+      <div class="notes-text">${note}</div>
+    </div>` : '';
+
+  return `<div class="game-card" style="animation-delay:${i*0.04}s">
+    <div class="card-header"><span class="card-meta">${title} &nbsp;·&nbsp; ${local_start}</span>${pill}</div>
+    ${row(home,true)}
+    ${row(away,false)}
+    ${wpHtml}
+    ${notesHtml}
+  </div>`;
+}
+
+// STANDINGS
+function buildStandings() {
+  ['east','west'].forEach(conf => {
+    const label = conf==='east'?'Eastern Conference':'Western Conference';
+    const color = conf==='east'?'#60A5FA':'var(--orange)';
+    const sorted = [...STANDINGS[conf]].sort((a,b)=>b.pct-a.pct);
+    const rows = sorted.map((t,i)=>`
+      <div class="s-row ${i===8?'playoff-cut':''}">
+        <div class="s-rank">${i+1}</div>
+        <div class="s-team">${t.t}</div>
+        <div class="s-w">${t.w}</div>
+        <div class="s-l">${t.l}</div>
+        <div class="s-pct">${t.pct.toFixed(3).replace('0.','.')}</div>
+      </div>`).join('');
+    document.getElementById(`${conf}-table`).innerHTML = `
+      <div class="standings-card">
+        <div class="standings-head"><span style="color:${color}">${label}</span><span class="playoffs-note">— playoff line</span></div>
+        <div class="s-cols"><div>#</div><div>Team</div><div style="text-align:center">W</div><div style="text-align:center">L</div><div style="text-align:right">PCT</div></div>
+        ${rows}
+      </div>`;
+  });
+}
+
+// BRACKET
+function buildBracket() {
+  renderBracket('east-bracket','Eastern Conference','east','#60A5FA');
+  renderBracket('west-bracket','Western Conference','west','var(--orange)');
+}
+
+function renderBracket(id,label,conf,color) {
+  const rounds = [
+    {name:'First Round',       series:PLAYOFFS.filter(p=>p.conf===conf&&p.round===1)},
+    {name:'Conference Semis',  series:PLAYOFFS.filter(p=>p.conf===conf&&p.round===2)},
+    {name:'Conference Finals', series:PLAYOFFS.filter(p=>p.conf===conf&&p.round===3)},
+  ];
+  const finals = PLAYOFFS.filter(p=>p.conf==='finals');
+
+  const roundsHtml = rounds.map(r=>{
+    const m = r.series.map(s=>matchupHtml(s)).join('');
+    return `<div class="bracket-round"><div class="round-name">${r.name}</div>${m}</div>`;
+  }).join('');
+
+  const finalsHtml = conf==='east' ? `
+    <div class="bracket-round">
+      <div class="round-name" style="color:var(--court)">🏆 NBA Finals · Jun 4</div>
+      ${finals.map(s=>matchupHtml(s,true)).join('')}
+    </div>` : '';
+
+  document.getElementById(id).innerHTML = `
+    <div class="bracket-conf-title" style="color:${color}">${label}</div>
+    ${roundsHtml}${finalsHtml}`;
+}
+
+function matchupHtml(s, isFinals=false) {
+  const isDone = s.status==='closed';
+  const isLive = s.status==='inprogress';
+  const winner = isDone ? (s.p[0].w>s.p[1].w?s.p[0].t:s.p[1].t) : null;
+
+  const statusTag = isDone ? `<span>Final</span>`
+    : isLive ? `<span class="live-tag">🔴 Live</span>`
+    : `<span>Upcoming</span>`;
+
+  const rows = s.p.map(p => {
+    const isWin = winner===p.t;
+    const isOut = isDone&&!isWin;
+    return `<div class="matchup-row ${isWin?'is-winner':''} ${isOut?'is-out':''}">
+      <span class="m-team">${p.t}${p.s?` <span class="m-seed">(${p.s})</span>`:''}</span>
+      <span class="m-wins ${isOut?'out':''}">${p.w}</span>
+    </div>`;
+  }).join('');
+
+  const cls = isFinals?'matchup finals-badge':'matchup';
+  return `<div class="${cls}">
+    <div class="matchup-meta"><span>${s.label}</span>${statusTag}</div>
+    ${rows}
+  </div>`;
+}
+
+// TABS
+function showTab(name) {
+  document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(e=>e.classList.remove('active'));
+  document.getElementById(`${name}-tab`).classList.add('active');
+  ['scores','standings','bracket','stories'].forEach((t,i)=>{ if(t===name) document.querySelectorAll('nav button')[i].classList.add('active'); });
+}
+
+// INIT
+buildTicker();
+buildScores();
+buildStandings();
+buildBracket();
+</script>
+</body>
+</html>
